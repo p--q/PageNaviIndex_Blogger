@@ -60,7 +60,6 @@ var PageNaviIndex_Blogger = PageNaviIndex_Blogger || function() {
 			return node;
 		},
 		createPageNavi: function(total) {  // フィードの総投稿数からページナビのボタンを作成に必要な計算をする。 -->
-//			var total = parseInt(json.feed.openSearch$totalResults.$t, 10);  // フィードから総投稿数の取得。
 			var currentPageNo = Math.floor((g.idx + g.perPage -1 )/g.perPage);  // start-indexから現在のページ番号を算出。
 			var diff =  Math.floor(g.numPages / 2);  // スタートページ - 現在のページ = diff。ジャンプボタンにも使用。
 		    var pageStart = currentPageNo - diff;  // スタートページの算出。
