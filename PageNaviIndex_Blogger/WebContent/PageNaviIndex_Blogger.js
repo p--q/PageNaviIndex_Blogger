@@ -11,7 +11,7 @@ var PageNaviIndex_Blogger = PageNaviIndex_Blogger || function() {
             	var total = parseInt(json.feed.openSearch$totalResults.$t, 10);  // フィードから総投稿数の取得。
             	var posts = [];  // 投稿のフィードデータをいれる配列。
             	Array.prototype.push.apply(posts, json.feed.entry);// 投稿のフィードデータを配列に追加。  	
-            	if (g.status&&g.postLabel) {g.status[0].textContent = "ラベル " + decodeURIComponent(g.postLabel) + " に一致する投稿が" + total + "個ありました。";}
+            	if (g.status&&g.postLabel) {g.status[0].textContent = "ラベル「" + decodeURIComponent(g.postLabel) + "」に一致する投稿が" + total + "個ありました。";}
             	g.createPage(total,posts);
             },
 	        loadFeedforQ : function(json) {
