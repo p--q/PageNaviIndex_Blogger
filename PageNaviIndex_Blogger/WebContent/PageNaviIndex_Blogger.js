@@ -54,6 +54,7 @@ var PageNaviIndex_Blogger = PageNaviIndex_Blogger || function() {
         	g.elem.appendChild(pagenavi);  // ページ内の要素にページナビを追加。
         	g.elem.appendChild(dateouter);  // ページ内の要素にインデックスページを追加。
         	g.elem.appendChild(pn.clonePageNavi(pagenavi));  // ページ内の要素にページナビを複製して追加。
+        	scrollTo(0,g.elem.offsetTop);
         },
         status: null,  // 結果のステーテス要素。
         postLabel: null  // ラベル名。
