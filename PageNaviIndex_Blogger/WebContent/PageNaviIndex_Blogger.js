@@ -154,7 +154,7 @@ var PageNaviIndex_Blogger = PageNaviIndex_Blogger || function() {
 		_nodes: null,
 	    createIndex: function(posts) {  // 投稿のフィードデータからインデックスページを作成する。
 	    	var dateouter = (g.w)?nd.divClass(["date-outer"]):nd.createElem("div");
-	    	var divposts = ix._nodes;  // 投稿をまとめるdiv要素の骨格を取得。
+	    	var divposts = ix._nodes.cloneNode(true);  // 投稿をまとめるdiv要素の骨格を取得。
 	    	divposts.className = (g.w)?"post-outer":"mobile-date-outer date-outer";
 	    	posts.forEach(function(e){  // 各投稿のフィードデータについて。
 	    		var m = divposts.cloneNode(true);  // mobile-post-outerクラスのdiv要素の骨格を複製。
