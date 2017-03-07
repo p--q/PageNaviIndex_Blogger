@@ -54,6 +54,9 @@ var PageNaviIndex_Blogger = PageNaviIndex_Blogger || function() {
         	g.elem.appendChild(pagenavi);  // ページ内の要素にページナビを追加。
         	g.elem.appendChild(dateouter);  // ページ内の要素にインデックスページを追加。
         	g.elem.appendChild(pn.clonePageNavi(pagenavi));  // ページ内の要素にページナビを複製して追加。
+        	var rect = g.elem.getBoundingClientRect() ;  // 要素の位置を取得する
+        	var positionY = rect.top + window.pageYOffset ;	// 要素のY座標
+        	window.scrollTo(0, positionY ) ;  // 要素の位置にスクロールさせる
         },
         status: null,  // 結果のステーテス要素。
         postLabel: null  // ラベル名。
@@ -150,10 +153,9 @@ var PageNaviIndex_Blogger = PageNaviIndex_Blogger || function() {
             },
 		_nodes: null,
 	    createIndex: function(posts) {  // 投稿のフィードデータからインデックスページを作成する。
-	    	var dateouter = nd.divClass(["date-outer"]);
+	    	var dateouter = (g.w)?nd.divClass(["date-outer"]):nd.createElem("div");
 	    	var divposts = ix._nodes;  // 投稿をまとめるdiv要素の骨格を取得。
 	    	divposts.className = (g.w)?"post-outer":"mobile-date-outer date-outer";
-	    	if (!g.w) {divposts.style.backgroundImage = "url(https://resources.blogblog.com/blogblog/data/1kt/transparent/white80.png)";}  // モバイルサイトではテンプレートの背景画像を設定する。
 	    	posts.forEach(function(e){  // 各投稿のフィードデータについて。
 	    		var m = divposts.cloneNode(true);  // mobile-post-outerクラスのdiv要素の骨格を複製。
 	    		m.childNodes[0].href = e.link[4].href;  // 投稿へのURLを投稿タイトルのa要素に追加。
