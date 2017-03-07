@@ -271,15 +271,15 @@ var PageNaviIndex_Blogger = PageNaviIndex_Blogger || function() {
 	    	}
 	    	return p||c;
 		},
-		appendChild: function(parent,child) {  // parentの最後のノードにchildを追加する。
-			var c = parent.firstChild;  // parent.childs[0]にすると構文エラーになる。
-			if (!c) {parent.appendChild(child);} 
-			while (c) {
-				var d = c.firstChild;
-				if (!d) {c.appendChild(child);} 
-				c = d;
-			}
-		}
+//		appendChild: function(parent,child) {  // parentの最後のノードにchildを追加する。
+//			var c = parent.firstChild;  // parent.childs[0]にすると構文エラーになる。
+//			if (!c) {parent.appendChild(child);} 
+//			while (c) {
+//				var d = c.firstChild;
+//				if (!d) {c.appendChild(child);} 
+//				c = d;
+//			}
+//		}
     };  // end of nd
     var fd = {  // フィード関連。
 		createURL: function () {  // URLから情報を得てフィードを取得するURLを作成。引数はstart-index。
