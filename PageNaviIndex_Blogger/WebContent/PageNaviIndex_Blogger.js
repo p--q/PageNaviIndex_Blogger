@@ -1,11 +1,7 @@
 // PageNaviIndex_Bloggerモジュール
 var PageNaviIndex_Blogger = PageNaviIndex_Blogger || function() {
     var pg = {  // グローバルスコープに出すオブジェクト。グローバルスコープから呼び出すときはPageNaviIndex_Bloggerになる。
-        defaults : {  // 既定値。
-            "perPage" : 7, //1ページあたりの投稿数。1ページの容量が1MBを超えないように設定する。最大150まで。
-            "numPages" : 5,  // ページナビに表示する通常ページボタンの数。スタートページからエンドページまで。
-            "jumpPages" : true  // trueのときはページ番号をすべて入れ替える、falseのときは1つずつ表示ページがずれる。
-        },
+        defaults : {},  // デフォルト値を入れるオブジェクト。
         callback : {  // フィードを受け取るコールバック関数。
             loadFeed : function(json) {  // 引数にフィードを受け取る関数。 
             	var total = parseInt(json.feed.openSearch$totalResults.$t, 10);  // フィードから総投稿数の取得。
@@ -37,11 +33,17 @@ var PageNaviIndex_Blogger = PageNaviIndex_Blogger || function() {
         }
     }; // end of pg
     var g = {  // PageNaviIndex_Bloggerモジュール内の"グローバル"変数。
-        perPage : pg.defaults.perPage,  // デフォルト値の取得。 1ページあたりの投稿数。
-        numPages : pg.defaults.numPages,  // デフォルト値の取得。ページナビに表示する通常ページボタンの数。
-        elem : null,  // ページナビを挿入するdiv要素。 -->
+		init: function(scrollToElem){  // デフォルト値の取得。
+	        g.perPage = pg.defaults.perPage;  // 1ページあたりの投稿数。
+	        g.numPages = pg.defaults.numPages;  // ページナビに表示する通常ページボタンの数。
+	        g.scrollTo = scrollToElem || g.elem;  // ページナビボタンで移動後のスクロール先の要素。
+	        g.buttonStyle = pg.defaults.buttonStyle;  // ページナビボタンのスタイル。
+	        g.currentButtonStyle = pg.defaults.currentButtonStyle;  // 現在のページ番号のスタイル。
+	        g.mouseOverColor = pg.defaults.mouseOverColor;  // 現在のページ番号にマウスを乗せた時の色。   			
+	        g.jumpPages = pg.defaults.jumpPages;  // ジャンプボタンの挙動設定。  
+		},
+        elem : null,  // ページナビを挿入するdiv要素。 
         idx : null,  // start-index
-        jumpPages : pg.defaults.jumpPages,  // ジャンプボタンの挙動設定。  
         w: true,  // モバイルサイトのときはfalseになる。
         q: null,  // 検索語
         posts: [],  // 検索結果のフィードからの投稿データを入れる配列。
@@ -54,8 +56,7 @@ var PageNaviIndex_Blogger = PageNaviIndex_Blogger || function() {
         	g.elem.appendChild(pagenavi);  // ページ内の要素にページナビを追加。
         	g.elem.appendChild(dateouter);  // ページ内の要素にインデックスページを追加。
         	g.elem.appendChild(pn.clonePageNavi(pagenavi));  // ページ内の要素にページナビを複製して追加。
-        	var rect = document.getElementById("uppermost").getBoundingClientRect();
-//        	var rect = g.elem.getBoundingClientRect() ;  // 要素の位置を取得する
+        	var rect = g.scrollTo.getBoundingClientRect();  // 要素の位置を取得する
         	var positionY = rect.top + window.pageYOffset ;	// 要素のY座標
         	window.scrollTo(0, positionY ) ;  // 要素の位置にスクロールさせる
         },
@@ -92,7 +93,7 @@ var PageNaviIndex_Blogger = PageNaviIndex_Blogger || function() {
 		    for (var j = pageStart; j <= pageEnd; j++) {
 		    	if (j == currentPageNo) {
 		    		var node = nd.createElem("div");
-		    		node.setAttribute("style","padding:5px 10px;margin:6px 2px;font-weight:bold;color:#fff;background-color:#000;box-shadow:0px 5px 3px -1px rgba(50, 50, 50, 0.53);"); 
+		    		node.setAttribute("style",g.currentButtonStyle); 
 		    		node.appendChild(nd.createTxt(j));
 		    		p.appendChild(node);
 		    	} else {
@@ -116,7 +117,7 @@ var PageNaviIndex_Blogger = PageNaviIndex_Blogger || function() {
     	},
     	_createButton: function(pageNo, text) {
     		var node = nd.createElem("div");
-    		node.setAttribute("style","padding:5px 10px;margin:6px 2px;color:#fff;background-color:#2973fc;box-shadow:0px 5px 3px -1px rgba(50, 50, 50, 0.53);cursor:pointer");
+    		node.setAttribute("style",g.buttonStyle);
     		node.title = pageNo;
     		node.className = "pagenavi_button";
     		node.appendChild(nd.createTxt(text));
@@ -136,7 +137,7 @@ var PageNaviIndex_Blogger = PageNaviIndex_Blogger || function() {
                 var target = e.target;  // イベントを発生したオブジェクト。
                 if (target.className == "pagenavi_button") {
                 	eh._rgbaC = window.getComputedStyle(e.target, '').backgroundColor;  // 背景色のRGBAを取得。
-                	target.style.backgroundColor = "grey";
+                	target.style.backgroundColor = g.mouseOverColor;
                 	target.style.fontWeight = "bold";
                 }
             },
@@ -329,7 +330,13 @@ var PageNaviIndex_Blogger = PageNaviIndex_Blogger || function() {
     return pg;  // グローバルスコープにだす。
 }();
 //デフォルト値を変更したいときは以下のコメントアウトをはずして設定する。
-//PageNaviIndex_Blogger.defaults["perPage"] = 7 //1ページあたりの投稿数。
-//PageNaviIndex_Blogger.defaults["numPages"] = 5 // ページナビに表示するページ数。
-//PageNaviIndex_Blogger.defaults["jumpPages"] = true // ページナビに表示するページ数。
+PageNaviIndex_Blogger.defaults["perPage"] = 7; //1ページあたりの投稿数。
+PageNaviIndex_Blogger.defaults["numPages"] = 5; // ページナビに表示するページ数。
+PageNaviIndex_Blogger.defaults["jumpPages"] = true; // ジャンプボタンの設定。trueでページ番号総入れ替え、falseで１ページずつ移動。
+//PageNaviIndex_Blogger.defaults["scrollTo"] = "uppermost";   // ページナビボタンで移動後のスクロール先。設定なければPageNaviIndex_Blogger.all()の引数のidの要素に飛ぶ。
+// ページナビボタンのスタイル。	
+PageNaviIndex_Blogger.defaults["buttonStyle"] =  "padding:5px 10px;margin:6px 2px;color:#fff;background-color:#2973fc;box-shadow:0px 5px 3px -1px rgba(50, 50, 50, 0.53);cursor:pointer"; 
+// 現在のページ番号のスタイル。
+ PageNaviIndex_Blogger.defaults["currentButtonStyle"] = "padding:5px 10px;margin:6px 2px;font-weight:bold;color:#fff;background-color:#000;box-shadow:0px 5px 3px -1px rgba(50, 50, 50, 0.53);"; 
+PageNaviIndex_Blogger.defaults["mouseOverColor"] = "grey";  // 現在のページ番号にマウスを乗せた時の色。 
 PageNaviIndex_Blogger.all("pagenaviindex");  // ページナビの起動。引き数にHTMLの要素のid。
