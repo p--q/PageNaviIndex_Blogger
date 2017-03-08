@@ -333,7 +333,7 @@ var PageNaviIndex_Blogger = PageNaviIndex_Blogger || function() {
 PageNaviIndex_Blogger.defaults["perPage"] = 7; //1ページあたりの投稿数。
 PageNaviIndex_Blogger.defaults["numPages"] = 5; // ページナビに表示するページ数。
 PageNaviIndex_Blogger.defaults["jumpPages"] = true; // ジャンプボタンの設定。trueでページ番号総入れ替え、falseで１ページずつ移動。
-//PageNaviIndex_Blogger.defaults["scrollTo"] = "uppermost";   // ページナビボタンで移動後のスクロール先。設定なければPageNaviIndex_Blogger.all()の引数のidの要素に飛ぶ。
+PageNaviIndex_Blogger.defaults["scrollTo"] = "uppermost";   // ページナビボタンで移動後のスクロール先。設定なければPageNaviIndex_Blogger.all()の引数のidの要素に飛ぶ。
 // ページナビボタンのスタイル。	
 PageNaviIndex_Blogger.defaults["buttonStyle"] =  "padding:5px 10px;margin:6px 2px;color:#fff;background-color:#2973fc;box-shadow:0px 5px 3px -1px rgba(50, 50, 50, 0.53);cursor:pointer"; 
 // 現在のページ番号のスタイル。
