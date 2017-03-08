@@ -27,6 +27,7 @@ var PageNaviIndex_Blogger = PageNaviIndex_Blogger || function() {
         all: function(elementID) {  // ここから開始する。引数にページナビを置換する要素のidを入れる。
         	ix.init();  // ページの切替ごとに計算不要なものを計算しておく。
         	g.elem = document.getElementById(elementID);  // 要素のidの要素を取得。
+        	g.init(document.getElementById(pg.defaults.scrollTo));  // 設定値の取得。
         	g.idx = 1;  // start-indexを1にする。
         	g.status = document.getElementsByClassName("status-msg-body");
         	if (g.elem) {fd.createURL();}  // 置換する要素が存在するときページを作成する。
