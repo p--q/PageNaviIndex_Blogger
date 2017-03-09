@@ -25,12 +25,14 @@ var PageNaviIndex_Blogger = PageNaviIndex_Blogger || function() {
 	        }
         },
         all: function(elementID) {  // ここから開始する。引数にページナビを置換する要素のidを入れる。
-        	ix.init();  // ページの切替ごとに計算不要なものを計算しておく。
         	g.elem = document.getElementById(elementID);  // 要素のidの要素を取得。
-        	g.init(document.getElementById(pg.defaults.scrollTo));  // 設定値の取得。
-        	g.idx = 1;  // start-indexを1にする。
-        	g.status = document.getElementsByClassName("status-msg-body");
-        	if (g.elem) {fd.createURL();}  // 置換する要素が存在するときページを作成する。
+        	if (g.elem) {  // 置換する要素が存在するときページを作成する。
+	        	ix.init();  // ページの切替ごとに計算不要なものを計算しておく。
+	        	g.init(document.getElementById(pg.defaults.scrollTo));  // 設定値の取得。
+	        	g.idx = 1;  // start-indexを1にする。
+	        	g.status = document.getElementsByClassName("status-msg-body");
+	        	fd.createURL();
+        	}
         }
     }; // end of pg
     var g = {  // PageNaviIndex_Bloggerモジュール内の"グローバル"変数。
@@ -61,7 +63,7 @@ var PageNaviIndex_Blogger = PageNaviIndex_Blogger || function() {
         	var positionY = rect.top + window.pageYOffset ;	// 要素のY座標
         	window.scrollTo(0, positionY ) ;  // 要素の位置にスクロールさせる
         },
-        status: null,  // 結果のステーテス要素。
+        status: null,  // 結果のステータス要素。
         postLabel: null  // ラベル名。
     }; 
     var pn = {  // ページナビ作成
@@ -164,12 +166,15 @@ var PageNaviIndex_Blogger = PageNaviIndex_Blogger || function() {
 	    		m.childNodes[0].href = e.link[4].href;  // 投稿へのURLを投稿タイトルのa要素に追加。
 	    		m.childNodes[0].childNodes[0].appendChild(nd.createTxt(e.title.$t));  // h3要素のテキストノードに投稿タイトルを追加。
 	    		m.childNodes[1].href = e.link[4].href;  // 投稿へのURLを投稿サマリのa要素に追加。
-	    		if (e.media$thumbnail) {m.childNodes[1].childNodes[0].childNodes[0].childNodes[0].childNodes[0].src = e.media$thumbnail.url;}// サムネイル画像があれば追加。
+	    		if (e.media$thumbnail) {  // サムネイル画像があれば追加。
+	    			m.childNodes[1].childNodes[0].childNodes[0].childNodes[0].childNodes[0].src = e.media$thumbnail.url;
+    			} else {
+    				m.childNodes[1].childNodes[0].childNodes[0].setAttribute("style","display:none;");  // サムネイル画像がないときmobile-index-thumbnailクラスのノードを非表示にする。
+    			}
 	    		m.childNodes[1].childNodes[0].childNodes[1].appendChild(nd.createTxt(ix._createSummary(e.summary.$t)));   // 投稿サマリーの表示。
 	    		m.childNodes[2].childNodes[0].appendChild(ix._createLabelist(e.category));  // post-headerクラスのdiv要素にラベル一覧のノードを追加。
 	    		m.childNodes[2].childNodes[1].appendChild(ix._createDate(e.published.$t, "公開"));  // post-headerクラスのdiv要素に公開日時のノードを追加。
 	    		m.childNodes[2].childNodes[1].appendChild(ix._createDate(e.updated.$t, "更新"));  // post-headerクラスのdiv要素に更新日時のノードを追加。
-	    		if (!e.media$thumbnail) {m.childNodes[1].childNodes[0].removeChild(m.childNodes[1].childNodes[0].childNodes[0]);}  // サムネイル画像がないときmobile-index-thumbnailクラスのノードを削除。先に削るとずれるので最後に削る。
     			dateouter.appendChild(m);  //  date-outerクラスのdiv要素に追加。
 	    	});
 	    	return dateouter;
