@@ -1,1 +1,3 @@
-java -jar ~/closure-compiler/compiler.jar --js PageNaviIndex_Blogger.js --js_output_file PageNaviIndex_Blogger.min.js
+FN=PageNaviIndex_Blogger
+rm ${FN}
+java -jar ~/closure-compiler/compiler.jar --js ${FN}.js --js_output_file ${FN}.min.js

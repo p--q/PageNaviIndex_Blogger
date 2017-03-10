@@ -130,6 +130,7 @@ var PageNaviIndex_Blogger = PageNaviIndex_Blogger || function() {
             mouseDown: function(e) {  // 要素をクリックしたときのイベントを受け取る関数。
                 var target = e.target;  // イベントを発生したオブジェクト。
                 if (target.className == "pagenavi_button") {
+                	target.style.pointerEvents = "none";  // 連続クリックできないようにする。
                 	g.idx = parseInt(target.title, 10) * g.perPage - g.perPage + 1;
                 	fd.createURL();  // 置換する要素が存在するときページを作成する。
                 }
@@ -274,15 +275,6 @@ var PageNaviIndex_Blogger = PageNaviIndex_Blogger || function() {
 	    	}
 	    	return p||c;
 		},
-//		appendChild: function(parent,child) {  // parentの最後のノードにchildを追加する。
-//			var c = parent.firstChild;  // parent.childs[0]にすると構文エラーになる。
-//			if (!c) {parent.appendChild(child);} 
-//			while (c) {
-//				var d = c.firstChild;
-//				if (!d) {c.appendChild(child);} 
-//				c = d;
-//			}
-//		}
     };  // end of nd
     var fd = {  // フィード関連。
 		createURL: function () {  // URLから情報を得てフィードを取得するURLを作成。引数はstart-index。
