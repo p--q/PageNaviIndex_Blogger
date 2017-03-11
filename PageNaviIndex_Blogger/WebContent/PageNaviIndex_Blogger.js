@@ -25,12 +25,14 @@ var PageNaviIndex_Blogger = PageNaviIndex_Blogger || function() {
 	        }
         },
         all: function(elementID) {  // ここから開始する。引数にページナビを置換する要素のidを入れる。
-        	ix.init();  // ページの切替ごとに計算不要なものを計算しておく。
         	g.elem = document.getElementById(elementID);  // 要素のidの要素を取得。
-        	g.init(document.getElementById(pg.defaults.scrollTo));  // 設定値の取得。
-        	g.idx = 1;  // start-indexを1にする。
-        	g.status = document.getElementsByClassName("status-msg-body");
-        	if (g.elem) {fd.createURL();}  // 置換する要素が存在するときページを作成する。
+        	if (g.elem) {  // 置換する要素が存在するときページを作成する。
+	        	ix.init();  // ページの切替ごとに計算不要なものを計算しておく。
+	        	g.init(document.getElementById(pg.defaults.scrollTo));  // 設定値の取得。
+	        	g.idx = 1;  // start-indexを1にする。
+	        	g.status = document.getElementsByClassName("status-msg-body");
+	        	fd.createURL();
+        	}
         }
     }; // end of pg
     var g = {  // PageNaviIndex_Bloggerモジュール内の"グローバル"変数。
@@ -61,7 +63,7 @@ var PageNaviIndex_Blogger = PageNaviIndex_Blogger || function() {
         	var positionY = rect.top + window.pageYOffset ;	// 要素のY座標
         	window.scrollTo(0, positionY ) ;  // 要素の位置にスクロールさせる
         },
-        status: null,  // 結果のステーテス要素。
+        status: null,  // 結果のステータス要素。
         postLabel: null  // ラベル名。
     }; 
     var pn = {  // ページナビ作成
@@ -130,6 +132,7 @@ var PageNaviIndex_Blogger = PageNaviIndex_Blogger || function() {
             mouseDown: function(e) {  // 要素をクリックしたときのイベントを受け取る関数。
                 var target = e.target;  // イベントを発生したオブジェクト。
                 if (target.className == "pagenavi_button") {
+                	target.style.pointerEvents = "none";  // 連続クリックできないようにする。
                 	g.idx = parseInt(target.title, 10) * g.perPage - g.perPage + 1;
                 	fd.createURL();  // 置換する要素が存在するときページを作成する。
                 }
@@ -164,12 +167,15 @@ var PageNaviIndex_Blogger = PageNaviIndex_Blogger || function() {
 	    		m.childNodes[0].href = e.link[4].href;  // 投稿へのURLを投稿タイトルのa要素に追加。
 	    		m.childNodes[0].childNodes[0].appendChild(nd.createTxt(e.title.$t));  // h3要素のテキストノードに投稿タイトルを追加。
 	    		m.childNodes[1].href = e.link[4].href;  // 投稿へのURLを投稿サマリのa要素に追加。
-	    		if (e.media$thumbnail) {m.childNodes[1].childNodes[0].childNodes[0].childNodes[0].childNodes[0].src = e.media$thumbnail.url;}// サムネイル画像があれば追加。
+	    		if (e.media$thumbnail) {  // サムネイル画像があれば追加。
+	    			m.childNodes[1].childNodes[0].childNodes[0].childNodes[0].childNodes[0].src = e.media$thumbnail.url;
+    			} else {
+    				m.childNodes[1].childNodes[0].childNodes[0].setAttribute("style","display:none;");  // サムネイル画像がないときmobile-index-thumbnailクラスのノードを非表示にする。
+    			}
 	    		m.childNodes[1].childNodes[0].childNodes[1].appendChild(nd.createTxt(ix._createSummary(e.summary.$t)));   // 投稿サマリーの表示。
 	    		m.childNodes[2].childNodes[0].appendChild(ix._createLabelist(e.category));  // post-headerクラスのdiv要素にラベル一覧のノードを追加。
 	    		m.childNodes[2].childNodes[1].appendChild(ix._createDate(e.published.$t, "公開"));  // post-headerクラスのdiv要素に公開日時のノードを追加。
 	    		m.childNodes[2].childNodes[1].appendChild(ix._createDate(e.updated.$t, "更新"));  // post-headerクラスのdiv要素に更新日時のノードを追加。
-	    		if (!e.media$thumbnail) {m.childNodes[1].childNodes[0].removeChild(m.childNodes[1].childNodes[0].childNodes[0]);}  // サムネイル画像がないときmobile-index-thumbnailクラスのノードを削除。先に削るとずれるので最後に削る。
     			dateouter.appendChild(m);  //  date-outerクラスのdiv要素に追加。
 	    	});
 	    	return dateouter;
@@ -274,15 +280,6 @@ var PageNaviIndex_Blogger = PageNaviIndex_Blogger || function() {
 	    	}
 	    	return p||c;
 		},
-//		appendChild: function(parent,child) {  // parentの最後のノードにchildを追加する。
-//			var c = parent.firstChild;  // parent.childs[0]にすると構文エラーになる。
-//			if (!c) {parent.appendChild(child);} 
-//			while (c) {
-//				var d = c.firstChild;
-//				if (!d) {c.appendChild(child);} 
-//				c = d;
-//			}
-//		}
     };  // end of nd
     var fd = {  // フィード関連。
 		createURL: function () {  // URLから情報を得てフィードを取得するURLを作成。引数はstart-index。
@@ -334,7 +331,7 @@ var PageNaviIndex_Blogger = PageNaviIndex_Blogger || function() {
 PageNaviIndex_Blogger.defaults["perPage"] = 7; //1ページあたりの投稿数。
 PageNaviIndex_Blogger.defaults["numPages"] = 5; // ページナビに表示するページ数。
 PageNaviIndex_Blogger.defaults["jumpPages"] = true; // ジャンプボタンの設定。trueでページ番号総入れ替え、falseで１ページずつ移動。
-//PageNaviIndex_Blogger.defaults["scrollTo"] = "uppermost";   // ページナビボタンで移動後のスクロール先。設定なければPageNaviIndex_Blogger.all()の引数のidの要素に飛ぶ。
+PageNaviIndex_Blogger.defaults["scrollTo"] = "uppermost";   // ページナビボタンで移動後のスクロール先。設定なければPageNaviIndex_Blogger.all()の引数のidの要素に飛ぶ。
 // ページナビボタンのスタイル。	
 PageNaviIndex_Blogger.defaults["buttonStyle"] =  "padding:5px 10px;margin:6px 2px;color:#fff;background-color:#2973fc;box-shadow:0px 5px 3px -1px rgba(50, 50, 50, 0.53);cursor:pointer"; 
 // 現在のページ番号のスタイル。
