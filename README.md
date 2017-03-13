@@ -8,7 +8,7 @@ This rewrites index pages and archive pages by replacing "include" of Blog1 widg
 
 In the layout screen, paste and save the code of PageNaviIndex_Blogger.js or PageNaviIndex_Blogger.min.js in the HTML / JavaScript gadget.
 
-When using this gadget in the mobile version, set the attribute of HTML widget with HTML/JavaScript gadget to mobile = 'yes'.
+When using this gadget in the mobile version, set the attribute of HTML widget with HTML/JavaScript gadget to `mobile = 'yes'`.
 
 Open the HTML editing page of the theme.
 
@@ -59,3 +59,4 @@ When replacing mobile version index pages, rewrite the mobile-main include of th
   <!--  <b:include name='mobile-nextprev'/> -->
 </b:includable>
 ```
+
