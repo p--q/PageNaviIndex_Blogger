@@ -59,6 +59,6 @@ When replacing mobile version index pages, rewrite the mobile-main include of th
   <!--  <b:include name='mobile-nextprev'/> -->
 </b:includable>
 ```
-##Workign Example
+##Working Example
 
 You can see a working example on [p--q](https://p--q.blogspot.jp/)'s site.
