@@ -29,6 +29,8 @@ PageNaviIndex_Blogger.defaults["mouseOverColor"] = "grey"; // The color when the
 
 In the layout screen, paste and save the code of PageNaviIndex_Blogger.js or PageNaviIndex_Blogger.min.js in the HTML / JavaScript gadget.
 
+This gadget must be loaded after the Blog1 gadget.
+
 When using this gadget in the mobile version, set the attribute of HTML widget with HTML/JavaScript gadget to `mobile = 'yes'`.
 
 Open the HTML editing page of the theme.
