@@ -8,6 +8,23 @@ This repository contains the Eclipse project.
 
 Eclipse Java EE IDE for Web Developers.　Version: Mars.2 Release (4.5.2)
 
+##Parameters
+```
+PageNaviIndex_Blogger.defaults["perPage"] = 7; // Number of posts per page.
+PageNaviIndex_Blogger.defaults["numPages"] = 5; // Number of pages to display in page navigation.
+PageNaviIndex_Blogger.defaults["jumpPages"] = true; // Jump button setting. Total page numbers are exchanged in true, false moves one page at a time.
+PageNaviIndex_Blogger.defaults["scrollTo"] = "uppermost";   // The page navigation button scrolls after moving. If it does not set, it jumps to the id element of the argument of PageNaviIndex_Blogger.all().
+```
+Since "uppermost" is a div element of id which exists only in this block, comment it out as appropriate.
+
+```
+// Style of page navigation buttons.	
+PageNaviIndex_Blogger.defaults["buttonStyle"] =  "padding:5px 10px;margin:6px 2px;color:#fff;background-color:#2973fc;box-shadow:0px 5px 3px -1px rgba(50, 50, 50, 0.53);cursor:pointer"; 
+// Style of the current page number.
+ PageNaviIndex_Blogger.defaults["currentButtonStyle"] = "padding:5px 10px;margin:6px 2px;font-weight:bold;color:#fff;background-color:#000;box-shadow:0px 5px 3px -1px rgba(50, 50, 50, 0.53);"; 
+PageNaviIndex_Blogger.defaults["mouseOverColor"] = "grey"; // The color when the mouse is placed on the page number.
+```
+
 ##How to Deploy
 
 In the layout screen, paste and save the code of PageNaviIndex_Blogger.js or PageNaviIndex_Blogger.min.js in the HTML / JavaScript gadget.
