@@ -15,7 +15,7 @@ PageNaviIndex_Blogger.defaults["numPages"] = 5; // Number of pages to display in
 PageNaviIndex_Blogger.defaults["jumpPages"] = true; // Jump button setting. Total page numbers are exchanged in true, false moves one page at a time.
 PageNaviIndex_Blogger.defaults["scrollTo"] = "uppermost";   // The page navigation button scrolls after moving. If it does not set, it jumps to the id element of the argument of PageNaviIndex_Blogger.all().
 ```
-Since "uppermost" is a div element of id which exists only in this block, comment it out as appropriate.
+Since "uppermost" is a div element of id which exists only in this blog, comment it out as appropriate.
 
 ```
 // Style of page navigation buttons.	
