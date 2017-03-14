@@ -4,6 +4,10 @@ This gadget uses feeds, so it will not work with private blogs.
 
 This rewrites index pages and archive pages by replacing "include" of Blog1 widget with HTML editing of the theme.
 
+This repository contains the Eclipse project.
+
+Eclipse Java EE IDE for Web Developers.　Version: Mars.2 Release (4.5.2)
+
 ##How to Deploy
 
 In the layout screen, paste and save the code of PageNaviIndex_Blogger.js or PageNaviIndex_Blogger.min.js in the HTML / JavaScript gadget.
