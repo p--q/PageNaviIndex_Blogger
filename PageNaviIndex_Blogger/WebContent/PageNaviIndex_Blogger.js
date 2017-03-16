@@ -7,7 +7,10 @@ var PageNaviIndex_Blogger = PageNaviIndex_Blogger || function() {
             	var total = parseInt(json.feed.openSearch$totalResults.$t, 10);  // フィードから総投稿数の取得。
             	var posts = [];  // 投稿のフィードデータをいれる配列。
             	Array.prototype.push.apply(posts, json.feed.entry);// 投稿のフィードデータを配列に追加。  	
-            	if (g.status&&g.postLabel) {g.status[0].textContent = "ラベル「" + decodeURIComponent(g.postLabel) + "」に一致する投稿が" + total + "個ありました。";}
+            	if (g.status&&g.postLabel) {
+            		var txt = (g.L10N)?"There are " +  total + " posts matching the label '" + decodeURIComponent(g.postLabel) + "'.":"ラベル「" + decodeURIComponent(g.postLabel) + "」に一致する投稿が" + total + "個ありました。";
+            		g.status[0].textContent = txt;
+        		}
             	g.createPage(total,posts);
             },
 	        loadFeedforQ : function(json) {
@@ -19,7 +22,10 @@ var PageNaviIndex_Blogger = PageNaviIndex_Blogger || function() {
 	        		url = "/feeds/posts/summary/?q=" + g.q + "&alt=json-in-script&callback=PageNaviIndex_Blogger.callback.loadFeedforQ&max-results=" + g.maxResults + "&start-index=" + g.startIndex; 
 			    	fd._writeScript(url);
 	        	} else {  // すべての検索結果のフィードが取得できたとき
-	        		if (g.status) {g.status[0].textContent = "検索キーワード「" + decodeURIComponent(g.q) + "」に一致する投稿が" + g.posts.length + "個ありました。";}
+	        		if (g.status) {
+	        			
+	        			g.status[0].textContent = "検索キーワード「" + decodeURIComponent(g.q) + "」に一致する投稿が" + g.posts.length + "個ありました。";
+        			}
 	        		g.createPage(g.posts.length,g.posts.slice(g.idx-1,g.idx-1+g.perPage));	
 	        	}
 	        }
@@ -44,6 +50,7 @@ var PageNaviIndex_Blogger = PageNaviIndex_Blogger || function() {
 	        g.currentButtonStyle = pg.defaults.currentButtonStyle;  // 現在のページ番号のスタイル。
 	        g.mouseOverColor = pg.defaults.mouseOverColor;  // 現在のページ番号にマウスを乗せた時の色。   			
 	        g.jumpPages = pg.defaults.jumpPages;  // ジャンプボタンの挙動設定。  
+	        g.L10N = (/.jp$/i.test(location.hostname))?false:true;  // jpドメインのときfalse,それ以外のときtrue。
 		},
         elem : null,  // ページナビを挿入するdiv要素。 
         idx : null,  // start-index
@@ -241,6 +248,8 @@ var PageNaviIndex_Blogger = PageNaviIndex_Blogger || function() {
     		var reD = /(\d\d\d\d)-(\d\d)-(\d\d).(\d\d):(\d\d):\d\d/;  // 日時を得る正規表現パターン。
     		var arr = reD.exec(d);  // 日時の取得。
     		var node = nd.createElem("div");
+    		
+    		
     		node.appendChild(nd.createTxt(arr[1] + "年" + arr[2] + "月" + arr[3] + "日 " + arr[4] + "時" + arr[5] + "分" + txt));
     		return node;
     	}
@@ -299,7 +308,10 @@ var PageNaviIndex_Blogger = PageNaviIndex_Blogger || function() {
 	    		} else {
 	    			g.q = reQ.exec(thisUrl)[1];  // 検索文字列を収得       		
 		        	url = "/feeds/posts/summary/?q=" + g.q + "&alt=json-in-script&callback=PageNaviIndex_Blogger.callback.loadFeedforQ&max-results=" + g.maxResults + "&start-index=1";  //最大投稿数のフィードを取得。    
-		        	if (g.status) {g.status[0].textContent = "検索キーワード「" + decodeURIComponent(g.q) + "」に一致する投稿を検索しています。";}
+		        	if (g.status) {
+		        		
+		        		g.status[0].textContent = "検索キーワード「" + decodeURIComponent(g.q) + "」に一致する投稿を検索しています。";
+	        		}
 		        	fd._writeScript(url);
 	    		}
 	    	} else {
