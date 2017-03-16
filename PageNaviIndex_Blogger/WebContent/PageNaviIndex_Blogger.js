@@ -8,8 +8,7 @@ var PageNaviIndex_Blogger = PageNaviIndex_Blogger || function() {
             	var posts = [];  // 投稿のフィードデータをいれる配列。
             	Array.prototype.push.apply(posts, json.feed.entry);// 投稿のフィードデータを配列に追加。  	
             	if (g.status&&g.postLabel) {
-            		var txt = (g.L10N)?"There are " +  total + " posts matching the label '" + decodeURIComponent(g.postLabel) + "'.":"ラベル「" + decodeURIComponent(g.postLabel) + "」に一致する投稿が" + total + "個ありました。";
-            		g.status[0].textContent = txt;
+            		g.status[0].textContent = st.resultLabel(total);
         		}
             	g.createPage(total,posts);
             },
@@ -23,8 +22,7 @@ var PageNaviIndex_Blogger = PageNaviIndex_Blogger || function() {
 			    	fd._writeScript(url);
 	        	} else {  // すべての検索結果のフィードが取得できたとき
 	        		if (g.status) {
-	        			var txt = (g.L10N)?"There are " + g.posts.length + " posts matching query '" + decodeURIComponent(g.q) +"'.":"検索キーワード「" + decodeURIComponent(g.q) + "」に一致する投稿が" + g.posts.length + "個ありました。";
-	        			g.status[0].textContent = txt;
+	        			g.status[0].textContent = st.resultQuery();
         			}
 	        		g.createPage(g.posts.length,g.posts.slice(g.idx-1,g.idx-1+g.perPage));	
 	        	}
@@ -33,6 +31,7 @@ var PageNaviIndex_Blogger = PageNaviIndex_Blogger || function() {
         all: function(elementID) {  // ここから開始する。引数にページナビを置換する要素のidを入れる。
         	g.elem = document.getElementById(elementID);  // 要素のidの要素を取得。
         	if (g.elem) {  // 置換する要素が存在するときページを作成する。
+        		st.init();  // 言語設定
 	        	ix.init();  // ページの切替ごとに計算不要なものを計算しておく。
 	        	g.init(document.getElementById(pg.defaults.scrollTo));  // 設定値の取得。
 	        	g.idx = 1;  // start-indexを1にする。
@@ -50,7 +49,6 @@ var PageNaviIndex_Blogger = PageNaviIndex_Blogger || function() {
 	        g.currentButtonStyle = pg.defaults.currentButtonStyle;  // 現在のページ番号のスタイル。
 	        g.mouseOverColor = pg.defaults.mouseOverColor;  // 現在のページ番号にマウスを乗せた時の色。   			
 	        g.jumpPages = pg.defaults.jumpPages;  // ジャンプボタンの挙動設定。  
-	        g.L10N = (/.jp$/i.test(location.hostname))?false:true;  // jpドメインのときfalse,それ以外のときtrue。
 		},
         elem : null,  // ページナビを挿入するdiv要素。 
         idx : null,  // start-index
@@ -59,7 +57,6 @@ var PageNaviIndex_Blogger = PageNaviIndex_Blogger || function() {
         posts: [],  // 検索結果のフィードからの投稿データを入れる配列。
         startIndex: 1,  // 検索結果用
         maxResults: 150,  //  検索結果用。フィードで取得可能な最大投稿数。
-        enM: ["Jan.","Feb.","Mar.","Apr.","May","Jun.","Jul.","Aug.","Sept.","Oct.","Nov.","Dec."],
         createPage: function(total,posts) {
     		var pagenavi = pn.createPageNavi(total);  // ページナビのノードの取得。
     		var dateouter = ix.createIndex(posts);  // インデックスページのノードを取得。
@@ -74,7 +71,27 @@ var PageNaviIndex_Blogger = PageNaviIndex_Blogger || function() {
         status: null,  // 結果のステータス要素。
         postLabel: null  // ラベル名。
     }; 
-    var pn = {  // ページナビ作成
+    var st = {  // 言語置換
+		enM: ["Jan.","Feb.","Mar.","Apr.","May","Jun.","Jul.","Aug.","Sept.","Oct.","Nov.","Dec."],
+		init: function() {
+			st.f = /.jp$/i.test(location.hostname);  // jpドメインのときtrueそうでなければfalse。
+			st.published = (st.f)?"公開":"published: ";
+			st.updated = (st.f)?"更新":"updated   : ";
+		},
+		formatDate: function(arr,txt) {  // 年月日時分
+			return (st.f)?arr[1] + "年" + arr[2] + "月" + arr[3] + "日 " + arr[4] + "時" + arr[5] + "分" + txt:txt + arr[1] + st.enM[arr[2]-1] + arr[3] + " " + arr[4] + ":" + arr[5];
+		},
+		searching: function() {
+			return (st.f)?"検索キーワード「" + decodeURIComponent(g.q) + "」に一致する投稿を検索しています。":"Searching for matches to query '" + decodeURIComponent(g.q) + "'.";
+		},
+		resultLabel: function(total) {
+			return (st.f)?"ラベル「" + decodeURIComponent(g.postLabel) + "」に一致する投稿が" + total + "個ありました。":"There are " +  total + " posts matching the label '" + decodeURIComponent(g.postLabel) + "'.";
+		},
+		resultQuery: function() {
+			return (st.f)?"検索キーワード「" + decodeURIComponent(g.q) + "」に一致する投稿が" + g.posts.length + "個ありました。":"There are " + g.posts.length + " posts matching query '" + decodeURIComponent(g.q) +"'.";
+		}
+    };
+        var pn = {  // ページナビ作成
 		clonePageNavi: function(pagenavi) {  // ページナビのノードを複製してイベントハンドラを追加する。
 			var node = pagenavi.cloneNode(true);
 			pn._addEventListerner(node);  // イベントハンドラの追加。
@@ -182,8 +199,8 @@ var PageNaviIndex_Blogger = PageNaviIndex_Blogger || function() {
     			}
 	    		m.childNodes[1].childNodes[0].childNodes[1].appendChild(nd.createTxt(ix._createSummary(e.summary.$t)));   // 投稿サマリーの表示。
 	    		m.childNodes[2].childNodes[0].appendChild(ix._createLabelist(e.category));  // post-headerクラスのdiv要素にラベル一覧のノードを追加。
-	    		m.childNodes[2].childNodes[1].appendChild(ix._createDate(e.published.$t, (g.L10N)?"published: ":"公開"));  // post-headerクラスのdiv要素に公開日時のノードを追加。
-	    		m.childNodes[2].childNodes[1].appendChild(ix._createDate(e.updated.$t, (g.L10N)?" updated: ": "更新"));  // post-headerクラスのdiv要素に更新日時のノードを追加。
+	    		m.childNodes[2].childNodes[1].appendChild(ix._createDate(e.published.$t, st.published));  // post-headerクラスのdiv要素に公開日時のノードを追加。
+	    		m.childNodes[2].childNodes[1].appendChild(ix._createDate(e.updated.$t, st.updated));  // post-headerクラスのdiv要素に更新日時のノードを追加。
     			dateouter.appendChild(m);  //  date-outerクラスのdiv要素に追加。
 	    	});
 	    	return dateouter;
@@ -204,8 +221,8 @@ var PageNaviIndex_Blogger = PageNaviIndex_Blogger || function() {
 			m.appendChild(nd.stackNodes([nd.divClass(["post-header"]),nd.createElem("div")]));
 			m.childNodes[2].setAttribute("style","display:flex;justify-content:flex-end;margin:0;");  // post-headerクラスのstyleを設定。右寄せのflexコンテナにする。
 			m.childNodes[2].childNodes[0].setAttribute("style","flex-grow:1;align-self:center;");  // 幅が広がるflexアイテムにする。
-			m.childNodes[2].appendChild(nd.createElem("div"));  // 投稿日時を入れるフレックスアイテム。
-			m.childNodes[2].childNodes[1].setAttribute("style","font-size:0.9em;flex-shrink:0;");  // 投稿日時
+			m.childNodes[2].appendChild(nd.createElem("div"));  // 投稿日時を入れるフレックスアイテム
+			m.childNodes[2].childNodes[1].setAttribute("style","display:flex;flex-direction:column;align-items:flex-end;font-size:0.9em;flex-shrink:0;");  // 投稿日時
 			return m;
 		},
 	    _createLabelist: function(labels) {  // 投稿のラベルの配列を引数にラベルのdiv要素を返す関数。ラベルがないときは空のdiv要素を返す。
@@ -249,8 +266,7 @@ var PageNaviIndex_Blogger = PageNaviIndex_Blogger || function() {
     		var reD = /(\d\d\d\d)-(\d\d)-(\d\d).(\d\d):(\d\d):\d\d/;  // 日時を得る正規表現パターン。
     		var arr = reD.exec(d);  // 日時の取得。
     		var node = nd.createElem("div");
-    		var txt2 = (g.L10N)?txt + arr[1] + g.enM[arr[2]-1] + arr[3] + " " + arr[4] + ":" + arr[5]  :arr[1] + "年" + arr[2] + "月" + arr[3] + "日 " + arr[4] + "時" + arr[5] + "分" + txt;
-    		node.appendChild(nd.createTxt(txt2));
+    		node.appendChild(nd.createTxt(st.formatDate(arr, txt)));
     		return node;
     	}
     };  // end of ix
@@ -309,8 +325,7 @@ var PageNaviIndex_Blogger = PageNaviIndex_Blogger || function() {
 	    			g.q = reQ.exec(thisUrl)[1];  // 検索文字列を収得       		
 		        	url = "/feeds/posts/summary/?q=" + g.q + "&alt=json-in-script&callback=PageNaviIndex_Blogger.callback.loadFeedforQ&max-results=" + g.maxResults + "&start-index=1";  //最大投稿数のフィードを取得。    
 		        	if (g.status) {
-		        		var txt = (g.L10N)?"Searching for matches to query '" + decodeURIComponent(g.q) + "'.":"検索キーワード「" + decodeURIComponent(g.q) + "」に一致する投稿を検索しています。";
-		        		g.status[0].textContent = txt;
+		        		g.status[0].textContent = st.searching();
 	        		}
 		        	fd._writeScript(url);
 	    		}
