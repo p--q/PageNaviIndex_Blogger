@@ -1,4 +1,4 @@
-#Page Navigation Gadget for [Blogger.com](https://www.blogger.com/about/?r=1-null_user)
+# Page Navigation Gadget for [Blogger.com](https://www.blogger.com/about/?r=1-null_user)
 
 This gadget uses feeds, so it will not work with private blogs.
 
@@ -8,7 +8,7 @@ This repository contains the Eclipse project.
 
 Eclipse Java EE IDE for Web Developers.　Version: Mars.2 Release (4.5.2)
 
-##Parameters
+## Parameters
 ```
 PageNaviIndex_Blogger.defaults["perPage"] = 7; // Number of posts per page.
 PageNaviIndex_Blogger.defaults["numPages"] = 5; // Number of pages to display in page navigation.
@@ -25,7 +25,7 @@ PageNaviIndex_Blogger.defaults["buttonStyle"] =  "padding:5px 10px;margin:6px 2p
 PageNaviIndex_Blogger.defaults["mouseOverColor"] = "grey"; // The color when the mouse is placed on the page number.
 ```
 
-##How to Deploy
+## How to Deploy
 
 In the layout screen, paste and save the code of PageNaviIndex_Blogger.js or PageNaviIndex_Blogger.min.js in the HTML / JavaScript gadget.
 
@@ -82,6 +82,6 @@ When replacing mobile version index pages, rewrite the mobile-main include of th
   <!--  <b:include name='mobile-nextprev'/> -->
 </b:includable>
 ```
-##Working Example
+## Working Example
 
 You can see a working example on [p--q](https://p--q.blogspot.jp/)'s site.
