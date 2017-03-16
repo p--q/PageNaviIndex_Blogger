@@ -23,8 +23,8 @@ var PageNaviIndex_Blogger = PageNaviIndex_Blogger || function() {
 			    	fd._writeScript(url);
 	        	} else {  // すべての検索結果のフィードが取得できたとき
 	        		if (g.status) {
-	        			
-	        			g.status[0].textContent = "検索キーワード「" + decodeURIComponent(g.q) + "」に一致する投稿が" + g.posts.length + "個ありました。";
+	        			var txt = (g.L10N)?"There are " + g.posts.length + " posts matching query '" + decodeURIComponent(g.q) +"'.":"検索キーワード「" + decodeURIComponent(g.q) + "」に一致する投稿が" + g.posts.length + "個ありました。";
+	        			g.status[0].textContent = txt;
         			}
 	        		g.createPage(g.posts.length,g.posts.slice(g.idx-1,g.idx-1+g.perPage));	
 	        	}
@@ -248,7 +248,7 @@ var PageNaviIndex_Blogger = PageNaviIndex_Blogger || function() {
     		var reD = /(\d\d\d\d)-(\d\d)-(\d\d).(\d\d):(\d\d):\d\d/;  // 日時を得る正規表現パターン。
     		var arr = reD.exec(d);  // 日時の取得。
     		var node = nd.createElem("div");
-    		
+    		var txt2 = (g.L10N)?  :arr[1] + "年" + arr[2] + "月" + arr[3] + "日 " + arr[4] + "時" + arr[5] + "分" + txt;
     		
     		node.appendChild(nd.createTxt(arr[1] + "年" + arr[2] + "月" + arr[3] + "日 " + arr[4] + "時" + arr[5] + "分" + txt));
     		return node;
@@ -309,8 +309,8 @@ var PageNaviIndex_Blogger = PageNaviIndex_Blogger || function() {
 	    			g.q = reQ.exec(thisUrl)[1];  // 検索文字列を収得       		
 		        	url = "/feeds/posts/summary/?q=" + g.q + "&alt=json-in-script&callback=PageNaviIndex_Blogger.callback.loadFeedforQ&max-results=" + g.maxResults + "&start-index=1";  //最大投稿数のフィードを取得。    
 		        	if (g.status) {
-		        		
-		        		g.status[0].textContent = "検索キーワード「" + decodeURIComponent(g.q) + "」に一致する投稿を検索しています。";
+		        		var txt = (g.L10N)?"Searching for matches to query '" + decodeURIComponent(g.q) + "'.":"検索キーワード「" + decodeURIComponent(g.q) + "」に一致する投稿を検索しています。";
+		        		g.status[0].textContent = txt;
 	        		}
 		        	fd._writeScript(url);
 	    		}
