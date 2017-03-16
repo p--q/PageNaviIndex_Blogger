@@ -59,6 +59,7 @@ var PageNaviIndex_Blogger = PageNaviIndex_Blogger || function() {
         posts: [],  // 検索結果のフィードからの投稿データを入れる配列。
         startIndex: 1,  // 検索結果用
         maxResults: 150,  //  検索結果用。フィードで取得可能な最大投稿数。
+        enM: ["Jan.","Feb.","Mar.","Apr.","May","Jun.","Jul.","Aug.","Sept.","Oct.","Nov.","Dec."],
         createPage: function(total,posts) {
     		var pagenavi = pn.createPageNavi(total);  // ページナビのノードの取得。
     		var dateouter = ix.createIndex(posts);  // インデックスページのノードを取得。
@@ -181,8 +182,8 @@ var PageNaviIndex_Blogger = PageNaviIndex_Blogger || function() {
     			}
 	    		m.childNodes[1].childNodes[0].childNodes[1].appendChild(nd.createTxt(ix._createSummary(e.summary.$t)));   // 投稿サマリーの表示。
 	    		m.childNodes[2].childNodes[0].appendChild(ix._createLabelist(e.category));  // post-headerクラスのdiv要素にラベル一覧のノードを追加。
-	    		m.childNodes[2].childNodes[1].appendChild(ix._createDate(e.published.$t, "公開"));  // post-headerクラスのdiv要素に公開日時のノードを追加。
-	    		m.childNodes[2].childNodes[1].appendChild(ix._createDate(e.updated.$t, "更新"));  // post-headerクラスのdiv要素に更新日時のノードを追加。
+	    		m.childNodes[2].childNodes[1].appendChild(ix._createDate(e.published.$t, (g.L10N)?"published: ":"公開"));  // post-headerクラスのdiv要素に公開日時のノードを追加。
+	    		m.childNodes[2].childNodes[1].appendChild(ix._createDate(e.updated.$t, (g.L10N)?" updated: ": "更新"));  // post-headerクラスのdiv要素に更新日時のノードを追加。
     			dateouter.appendChild(m);  //  date-outerクラスのdiv要素に追加。
 	    	});
 	    	return dateouter;
@@ -248,9 +249,8 @@ var PageNaviIndex_Blogger = PageNaviIndex_Blogger || function() {
     		var reD = /(\d\d\d\d)-(\d\d)-(\d\d).(\d\d):(\d\d):\d\d/;  // 日時を得る正規表現パターン。
     		var arr = reD.exec(d);  // 日時の取得。
     		var node = nd.createElem("div");
-    		var txt2 = (g.L10N)?  :arr[1] + "年" + arr[2] + "月" + arr[3] + "日 " + arr[4] + "時" + arr[5] + "分" + txt;
-    		
-    		node.appendChild(nd.createTxt(arr[1] + "年" + arr[2] + "月" + arr[3] + "日 " + arr[4] + "時" + arr[5] + "分" + txt));
+    		var txt2 = (g.L10N)?txt + arr[1] + g.enM[arr[2]-1] + arr[3] + " " + arr[4] + ":" + arr[5]  :arr[1] + "年" + arr[2] + "月" + arr[3] + "日 " + arr[4] + "時" + arr[5] + "分" + txt;
+    		node.appendChild(nd.createTxt(txt2));
     		return node;
     	}
     };  // end of ix
